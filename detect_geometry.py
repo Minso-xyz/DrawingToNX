@@ -14,3 +14,50 @@ print("Grayscale: ", gray.shape)
 
 cv2.imwrite("Output/gray.jpg", gray)
 cv2.imwrite("Output/binary.png", binary)
+
+# print the color value of the binary image [0 255 (black/white)]
+import numpy as np
+print("Binary values: ", np.unique(binary))
+
+# find contours of the binary image with the options (RETR_TREE, CHAIN_APPROX_SIMPLE)
+contours, hierarchy = cv2.findContours(
+	binary,
+	cv2.RETR_TREE,
+	cv2.CHAIN_APPROX_SIMPLE
+)
+
+# print the number of contours/area of the contour[0]
+print("Number of contours: ", len(contours))
+print(contours[0])
+area = cv2.contourArea(contours[0])
+print("Area: ", area)
+
+# print the area of all the contours
+for contour in contours:
+	area = cv2.contourArea(contour)
+	area = cv2.contourArea(contour)
+	print(area)
+
+# Retrieve the contour with the largest area
+largest_contour = max(contours, key=cv2.contourArea)
+largest_area = cv2.contourArea(largest_contour)
+print("Largest contour area: ", largest_area)
+
+# draw the result
+result = image.copy()
+cv2.drawContours(
+	result,   # where to draw
+	[largest_contour],   # what to draw (list)
+	-1,   # draw all the contour received
+	(0,0,255),  # Blue = 0, Green = 0, Red=255
+	3   # The thickness of line [px]
+)
+cv2.imwrite("Output/largest_contour.jpg", result)
+
+# check the boundingbox surrounding the largest_contour
+x, y, width, height = cv2.boundingRect(largest_contour)
+print("x: ", x)
+print("y: ", y)
+print("width: ", width)
+print("height: ", height)
+
