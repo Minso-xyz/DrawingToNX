@@ -1,0 +1,6 @@
+C:\Users\Minsuh Yuko Kim\Documents\Personal Projects\DrawingToNX\NX\DrawingToNXBuilder\DrawingToNXBuilder\bin\Debug\DrawingToNXBuilder.dll
+C:\Users\Minsuh Yuko Kim\Documents\Personal Projects\DrawingToNX\NX\DrawingToNXBuilder\DrawingToNXBuilder\bin\Debug\DrawingToNXBuilder.pdb
+C:\Users\Minsuh Yuko Kim\Documents\Personal Projects\DrawingToNX\NX\DrawingToNXBuilder\DrawingToNXBuilder\obj\Debug\DrawingToNXBuilder.csproj.AssemblyReference.cache
+C:\Users\Minsuh Yuko Kim\Documents\Personal Projects\DrawingToNX\NX\DrawingToNXBuilder\DrawingToNXBuilder\obj\Debug\DrawingToNXBuilder.csproj.CoreCompileInputs.cache
+C:\Users\Minsuh Yuko Kim\Documents\Personal Projects\DrawingToNX\NX\DrawingToNXBuilder\DrawingToNXBuilder\obj\Debug\DrawingToNXBuilder.dll
+C:\Users\Minsuh Yuko Kim\Documents\Personal Projects\DrawingToNX\NX\DrawingToNXBuilder\DrawingToNXBuilder\obj\Debug\DrawingToNXBuilder.pdb
