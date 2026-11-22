@@ -13,7 +13,7 @@ Convert 2D engineering drawings into Siemens NX 3D models using Python, OpenCV, 
 - [x] Convert image to grayscale
 - [x] Apply binary threshold preprocessing
 - [x] Detect outer profile
-- [ ] Detect circular holes
+- [x] Detect circular holes
 - [ ] Convert pixel geometry to real dimensions
 - [ ] Export geometry to JSON
 - [ ] Generate 3D geometry in Siemens NX
@@ -29,3 +29,8 @@ The first prototype uses a simple rectangular plate with four circular holes.
 
 ## Plate detection
 ![DrawingToNX](Output/plate_detected.jpg)
+
+## Hole detection
+![DrawingToNX](Output/holes_detected.jpg)
+
+Green: Perimeter of the circles / Red: Center of the circles
