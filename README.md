@@ -15,7 +15,7 @@ Convert 2D engineering drawings into Siemens NX 3D models using Python, OpenCV, 
 - [x] Detect outer profile
 - [x] Detect circular holes
 - [x] Convert pixel geometry to real dimensions
-- [ ] Export geometry to JSON
+- [x] Export geometry to JSON
 - [ ] Generate 3D geometry in Siemens NX
 
 ## Input image
@@ -51,4 +51,36 @@ Text: 20 x: 396 y: 119 confidence: 96
 Text: 10 x: 681 y: 119 confidence: 96
 ```
 
-
+## Export to JSON
+```text
+{
+    "units": "mm",
+    "plate": {
+        "width": 50.0,
+        "height": 40.0,
+        "thickness": 3.0
+    },
+    "holes": [
+        {
+            "x": 10.0,
+            "y": 10.0,
+            "diameter": 5.5
+        },
+        {
+            "x": 40.0,
+            "y": 10.0,
+            "diameter": 5.5
+        },
+        {
+            "x": 10.0,
+            "y": 30.0,
+            "diameter": 5.5
+        },
+        {
+            "x": 40.0,
+            "y": 30.0,
+            "diameter": 5.5
+        }
+    ]
+}
+```
