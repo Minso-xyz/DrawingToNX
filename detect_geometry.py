@@ -1,4 +1,8 @@
 import cv2
+import numpy as np
+import pytesseract
+pytesseract.pytesseract.tesseract_cmd = (r"C:\Program Files\Tesseract-OCR\tesseract.exe")
+
 image = cv2.imread("Input/plate.jpg")
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -172,3 +176,77 @@ for x, y, radius in circles:
     print("Center:", x, y, "Radius:", radius)   # print the center & radius of the detected circles
 
 cv2.imwrite("Output/holes_detected.jpg",hole_result)
+
+# read the dimensional data from the scaled image
+ocr_image = cv2.resize(
+    image,
+    None,
+    fx=3,
+    fy=3,
+    interpolation=cv2.INTER_CUBIC
+)
+
+# read the strings
+print("Horizontal OCR result: ")
+cv2.imwrite("Output/ocr_image.png", ocr_image)
+text = pytesseract.image_to_string(
+    ocr_image,
+    config="--psm 11"  # find the text located randomly
+)
+
+# read the data
+data = pytesseract.image_to_data(
+    ocr_image,
+    config="--psm 11",
+    output_type=pytesseract.Output.DICT
+)
+for i in range(len(data["text"])):
+
+    text_value = data["text"][i]
+    confidence = int(data["conf"][i])
+
+    if text_value.strip() != "" and confidence >= 80:  # show the text/data that is not empty/confidence >=80
+        print(
+            "Text:", text_value,
+            "x:", data["left"][i],
+            "y:", data["top"][i],
+            "confidence:", confidence
+        )
+# result
+#Text: 10 x: 394 y: 312 confidence: 96
+#Text: 30 x: 779 y: 306 confidence: 96
+#Text: 10 x: 1147 y: 312 confidence: 96
+#Text: 5.5 x: 801 y: 1375 confidence: 90
+
+# rotate the image at 90 degree and retrieve the vertical dimensions
+vertical_roi = image[150:450, 0:130]
+cv2.imwrite("Output/vertical_roi.jpg", vertical_roi)
+
+rotated_vertical = cv2.rotate(vertical_roi, cv2.ROTATE_90_CLOCKWISE)
+cv2.imwrite("Output/rotated_vertical.jpg",rotated_vertical)
+
+vertical_text = pytesseract.image_to_string(
+    rotated_vertical,
+    config="--psm 11"
+)
+
+vertical_ocr_image = cv2.resize(
+    rotated_vertical,
+    None,
+    fx=3,
+    fy=3,
+    interpolation=cv2.INTER_CUBIC
+)
+
+cv2.imwrite(
+    "Output/vertical_ocr_image.png",
+    vertical_ocr_image
+)
+
+vertical_text = pytesseract.image_to_string(
+    vertical_ocr_image,
+    config="--psm 11"
+)
+
+print("Vertical OCR Result:")
+print(vertical_text)
