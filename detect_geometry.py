@@ -128,3 +128,47 @@ cv2.drawContours(
     3
 )
 cv2.imwrite("Output/plate_detected.jpg",plate_result)
+
+# Hole detection
+blurred = cv2.medianBlur(roi_gray, 5)  # optimize the noise
+circles = cv2.HoughCircles(
+    blurred,  # where to find
+    cv2.HOUGH_GRADIENT,   # which Hough method to use
+    dp=1,
+    minDist=50,   # the centers of the retrived circles should be apart 50px at least
+    param1=100,
+    param2=30,
+    minRadius=10,   # ignore the circles smaller than r=10
+    maxRadius=30   # ignore the circles bigger than r=30
+)
+
+if circles is not None:
+    print("Number of circles: ", len(circles[0]))   # circles are saved in circles[0]
+else:
+    print("No circles detected!")
+
+    # draw the detected circle
+circles = np.round(circles[0, :]).astype("int")
+hole_result = roi.copy()
+
+for x, y, radius in circles:
+    # perimeter of the circle
+    cv2.circle(
+        hole_result,
+        (x, y),
+        radius,
+        (0, 255, 0),
+        2
+    )
+
+    # center of the circle
+    cv2.circle(
+        hole_result,
+        (x, y),
+        3,
+        (0, 0, 255),
+        -1
+    )
+    print("Center:", x, y, "Radius:", radius)   # print the center & radius of the detected circles
+
+cv2.imwrite("Output/holes_detected.jpg",hole_result)
