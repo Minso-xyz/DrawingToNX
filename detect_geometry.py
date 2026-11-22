@@ -243,10 +243,23 @@ cv2.imwrite(
     vertical_ocr_image
 )
 
-vertical_text = pytesseract.image_to_string(
+vertical_data = pytesseract.image_to_data(
     vertical_ocr_image,
-    config="--psm 11"
+    config="--psm 11",
+    output_type=pytesseract.Output.DICT
 )
 
 print("Vertical OCR Result:")
-print(vertical_text)
+
+for i in range(len(vertical_data["text"])):
+
+    text_value = vertical_data["text"][i]
+    confidence = int(vertical_data["conf"][i])
+
+    if text_value.strip() != "" and confidence >= 80:
+        print(
+            "Text:", text_value,
+            "x:", vertical_data["left"][i],
+            "y:", vertical_data["top"][i],
+            "confidence:", confidence
+        )
