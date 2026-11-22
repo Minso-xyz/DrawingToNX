@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 import pytesseract
+import json
+
 pytesseract.pytesseract.tesseract_cmd = (r"C:\Program Files\Tesseract-OCR\tesseract.exe")
 
 image = cv2.imread("Input/plate.jpg")
@@ -238,10 +240,7 @@ vertical_ocr_image = cv2.resize(
     interpolation=cv2.INTER_CUBIC
 )
 
-cv2.imwrite(
-    "Output/vertical_ocr_image.png",
-    vertical_ocr_image
-)
+cv2.imwrite("Output/vertical_ocr_image.png",vertical_ocr_image)
 
 vertical_data = pytesseract.image_to_data(
     vertical_ocr_image,
@@ -263,3 +262,24 @@ for i in range(len(vertical_data["text"])):
             "y:", vertical_data["top"][i],
             "confidence:", confidence
         )
+
+# Export JSON (hardcoded)
+geometry_data = {
+    "units": "mm",
+    "plate": {
+        "width": 50.0,
+        "height": 40.0,
+        "thickness": 3.0
+    },
+    "holes": [
+        {"x": 10.0, "y": 10.0, "diameter": 5.5},
+        {"x": 40.0, "y": 10.0, "diameter": 5.5},
+        {"x": 10.0, "y": 30.0, "diameter": 5.5},
+        {"x": 40.0, "y": 30.0, "diameter": 5.5}
+    ]
+}
+
+with open("Output/geometry.json", "w") as file:
+    json.dump(geometry_data, file, indent=4)
+
+print("geometry.json created")
