@@ -20,24 +20,43 @@ namespace DrawingToNXBuilder
 
             ListingWindow lw = session.ListingWindow;
             lw.Open();
-            lw.WriteLine("DrawingToNXBuilder started.");
 
-            // create the plate
-            Body plateBody = CreatePlate(session, workPart);
-            lw.WriteLine("The plate 50 x 40 x 3 [mm] has been generated.");
+            try
+            {
+                lw.WriteLine("DrawingToNXBuilder started.");
 
-            // Create the holes
-            PointFeature[] holePoints = CreateHolePoints(workPart, new Point3d[]
-        {
+                // create the plate
+                Body plateBody = CreatePlate(session, workPart);
+                lw.WriteLine("The plate 50 x 40 x 3 [mm] has been generated.");
+
+                // Create the holes
+                PointFeature[] holePoints = CreateHolePoints(workPart, new Point3d[]
+            {
                 new Point3d(10.0, 10.0, 3.0),
                 new Point3d(40.0, 10.0, 3.0),
                 new Point3d(10.0, 30.0, 3.0),
                 new Point3d(40.0, 30.0, 3.0)
-        });
-            lw.WriteLine("The points have been generated.");
+            });
+                lw.WriteLine("The points have been generated.");
 
-            CreateThroughHoles(session, workPart, plateBody, holePoints, 5.5);
-            lw.WriteLine("The holes have been generated.");
+                CreateThroughHoles(session, workPart, plateBody, holePoints, 5.5);
+                lw.WriteLine("The holes have been generated.");
+            }
+
+            catch (NXException ex)
+            {
+                lw.WriteLine("NXException");
+                lw.WriteLine("Message: " + ex.Message);
+                lw.WriteLine("ErrorCode: " + ex.ErrorCode);
+                lw.WriteLine(ex.StackTrace);
+            }
+            catch (Exception ex)
+            {
+                lw.WriteLine("Exception");
+                lw.WriteLine("Type: " + ex.GetType().FullName);
+                lw.WriteLine("Message: " + ex.Message);
+                lw.WriteLine(ex.StackTrace);
+            }
         }
 
         private static Body CreatePlate(Session theSession, Part workPart)
