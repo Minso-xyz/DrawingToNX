@@ -41,6 +41,9 @@ namespace DrawingToNXBuilder
 
                 CreateThroughHoles(session, workPart, plateBody, holePoints, 5.5);
                 lw.WriteLine("The holes have been generated.");
+
+                Save(session, workPart);
+                lw.WriteLine("The generated .prt file has been save.");
             }
 
             catch (NXException ex)
@@ -691,6 +694,15 @@ namespace DrawingToNXBuilder
 
             holeBuilder.Commit();
             holeBuilder.Destroy();
+        }
+
+        private static void Save(Session theSession, Part workPart)
+        {
+            NXOpen.Part displayPart = theSession.Parts.Display;
+            NXOpen.PartSaveStatus partSaveStatus1;
+            partSaveStatus1 = workPart.SaveAs("\\generatedNXPart.prt");
+
+            partSaveStatus1.Dispose();
         }
 
         public static int GetUnloadOption(string dummy)
