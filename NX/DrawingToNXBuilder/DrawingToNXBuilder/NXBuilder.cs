@@ -25,6 +25,19 @@ namespace DrawingToNXBuilder
             // create the plate
             Body plateBody = CreatePlate(session, workPart);
             lw.WriteLine("The plate 50 x 40 x 3 [mm] has been generated.");
+
+            // Create the holes
+            PointFeature[] holePoints = CreateHolePoints(workPart, new Point3d[]
+        {
+                new Point3d(10.0, 10.0, 3.0),
+                new Point3d(40.0, 10.0, 3.0),
+                new Point3d(10.0, 30.0, 3.0),
+                new Point3d(40.0, 30.0, 3.0)
+        });
+            lw.WriteLine("The points have been generated.");
+
+            CreateThroughHoles(session, workPart, plateBody, holePoints, 5.5);
+            lw.WriteLine("The holes have been generated.");
         }
 
         private static Body CreatePlate(Session theSession, Part workPart)
@@ -586,17 +599,79 @@ namespace DrawingToNXBuilder
 
             NXOpen.Expression expression8 = extrudeBuilder1.Limits.StartExtend.Value;
             NXOpen.Expression expression9 = extrudeBuilder1.Limits.EndExtend.Value;
-            extrudeBuilder1.Destroy();
-
+            
             workPart.Expressions.Delete(expression7);
 
-            Feature extrudeFeature = extrudeBuilder1.CommitFeature();
-
-            Body[] bodies = extrudeFeature.GetBodies();
+            Body[] bodies = feature2.GetBodies();
 
             extrudeBuilder1.Destroy();
 
             return bodies[0];
+        }
+
+        private static PointFeature[] CreateHolePoints(Part workPart, Point3d[] coordinates)
+        {
+            List<PointFeature> pointFeatures = new List<PointFeature>();
+
+            foreach (Point3d coordinate in coordinates)
+            {
+                Point point = workPart.Points.CreatePoint(coordinate);
+                PointFeatureBuilder pointBuilder = workPart.BaseFeatures.CreatePointFeatureBuilder(null);
+
+                pointBuilder.Point = point;
+                PointFeature pointFeature = (PointFeature)pointBuilder.Commit();
+
+                pointBuilder.Destroy();
+                pointFeatures.Add(pointFeature);
+            }
+            return pointFeatures.ToArray();
+        }
+
+        private static void CreateThroughHoles(Session theSession, Part workPart, Body plateBody, PointFeature[] pointFeatures, double diameter)
+        {
+            HolePackageBuilder holeBuilder = workPart.Features.CreateHolePackageBuilder(null);
+
+            holeBuilder.Tolerance = 0.01;
+            holeBuilder.GeneralSimpleHoleDiameter.SetFormula(diameter.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+            holeBuilder.HoleDepthLimitOption = HolePackageBuilder.HoleDepthLimitOptions.ThroughBody;
+
+            holeBuilder.BooleanOperation.Type = NXOpen.GeometricUtilities.BooleanOperation.BooleanType.Subtract;
+
+            ScCollector targetCollector = holeBuilder.BooleanOperation.GetTargetBodiesCollector();
+            SelectionIntentRuleOptions bodyRuleOptions = workPart.ScRuleFactory.CreateRuleOptions();
+            bodyRuleOptions.SetSelectedFromInactive(false);
+
+            BodyDumbRule bodyRule = workPart.ScRuleFactory.CreateRuleBodyDumb(
+                    new Body[] { plateBody },
+                    true,
+                    bodyRuleOptions);
+
+            bodyRuleOptions.Dispose();
+
+            targetCollector.ReplaceRules(new SelectionIntentRule[] { bodyRule }, false);
+
+            holeBuilder.HolePosition.DistanceTolerance = 0.01;
+            holeBuilder.HolePosition.ChainingTolerance = 0.0095;
+
+            holeBuilder.HolePosition.SetAllowedEntityTypes(Section.AllowTypes.OnlyPoints);
+
+            FeaturePointsRule pointRule = workPart.ScRuleFactory.CreateRuleFeaturePoints(pointFeatures, null);
+
+            holeBuilder.HolePosition.AllowSelfIntersection(true);
+            holeBuilder.HolePosition.AllowDegenerateCurves(false);
+
+            holeBuilder.HolePosition.AddToSection(
+                new SelectionIntentRule[] { pointRule },
+                null,
+                null,
+                null,
+                new Point3d(0.0, 0.0, 0.0),
+                Section.Mode.Create,
+                false);
+
+            holeBuilder.Commit();
+            holeBuilder.Destroy();
         }
 
         public static int GetUnloadOption(string dummy)
