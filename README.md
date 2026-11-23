@@ -86,4 +86,5 @@ Text: 10 x: 681 y: 119 confidence: 96
 ```
 
 ## Generated NX .par file
+Tested on NX2406 by executing user function .dll (Ctrl + U)
 ![DrawingToNX](GeneratedNXPart.png)
