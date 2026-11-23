@@ -84,3 +84,6 @@ Text: 10 x: 681 y: 119 confidence: 96
     ]
 }
 ```
+
+## Generated NX .par file
+![DrawingToNX](GeneratedNXPart.png)
