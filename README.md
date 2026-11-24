@@ -1,6 +1,6 @@
 # Drawing To NX
 
-Convert 2D engineering drawings into Siemens NX 3D models using Python, OpenCV, and NXOpen.
+Convert 2D engineering drawing images into Siemens NX 3D models using Python, OpenCV, and NXOpen.
 
 ## Pipeline
 
@@ -16,7 +16,7 @@ Convert 2D engineering drawings into Siemens NX 3D models using Python, OpenCV, 
 - [x] Detect circular holes
 - [x] Convert pixel geometry to real dimensions
 - [x] Export geometry to JSON
-- [ ] Generate 3D geometry in Siemens NX
+- [x] Generate 3D geometry in Siemens NX
 
 ## Input image
 The first prototype uses a simple rectangular plate with four circular holes.
@@ -86,4 +86,5 @@ Text: 10 x: 681 y: 119 confidence: 96
 ```
 
 ## Generated NX .par file
+Tested on NX2406 by executing user function .dll (Ctrl + U)
 ![DrawingToNX](GeneratedNXPart.png)
