@@ -1,3 +1,15 @@
 .venv/
 .vs/
 __pycache__/
+
+# Visual Studio
+.vs/
+**/bin/
+**/obj/
+
+# Python
+.venv/
+__pycache__/
+
+# Generated output
+Output/
