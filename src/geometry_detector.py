@@ -12,3 +12,15 @@ def find_largest_contour(contours):
 	largest_contour = max(contours, key=cv2.contourArea)
 	largest_area = cv2.contourArea(largest_contour)
 	return largest_contour, largest_area
+
+def draw_contour(image, contour, result_path):
+	result = image.copy()
+	cv2.drawContours(
+		result,   # where to draw
+		[contour],   # what to draw (list)
+		-1,   # draw all the contour received
+		(0,0,255),  # Blue = 0, Green = 0, Red=255
+		3   # The thickness of line [px]
+	)
+	cv2.imwrite(result_path, result)
+	return result

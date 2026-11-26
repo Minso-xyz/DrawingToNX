@@ -1,6 +1,7 @@
 from image_processor import (load_image, convert_to_grayscale, create_binary_image)
 from geometry_detector import find_contours
 from geometry_detector import find_largest_contour
+from geometry_detector import draw_contour
 import cv2
 
 def main():
@@ -17,9 +18,9 @@ def main():
 
 	cv2.imwrite("Output/refactor_gray.png", gray)
 	cv2.imwrite("Output/refactor_binary.png", binary)
+	draw_contour(image, largestContour, "Output/largest_contour.jpg")
+
 	print("Image preprocessing completed.")
-
-
 
 # execute main()
 if __name__ == "__main__":
