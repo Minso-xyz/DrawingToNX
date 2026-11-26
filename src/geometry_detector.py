@@ -24,3 +24,7 @@ def draw_contour(image, contour, result_path):
 	)
 	cv2.imwrite(result_path, result)
 	return result
+
+def check_boundingbox(largest_contour):
+	x,y,width,height = cv2.boundingRect(largest_contour)
+	return x, y, width, height
