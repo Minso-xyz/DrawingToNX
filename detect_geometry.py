@@ -41,7 +41,6 @@ print("Area: ", area)
 # print the area of all the contours
 for contour in contours:
 	area = cv2.contourArea(contour)
-	area = cv2.contourArea(contour)
 	print(area)
 
 # Retrieve the contour with the largest area
